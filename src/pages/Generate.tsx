@@ -134,7 +134,7 @@ function Generate() {
                     id="custom-style"
                     value={customStyle}
                     onChange={(e) => setCustomStyle(e.target.value)}
-                    placeholder="Describe your custom style (e.g., 'in the style of stained glass with vibrant colors and bold outlines')"
+                    placeholder="Describe your custom style (e.g., 'stained glass with vibrant colors and bold outlines')"
                     rows={3}
                     className="input mt-2"
                   />
