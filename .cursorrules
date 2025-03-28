@@ -1,0 +1,25 @@
+- Always provide fully functional code, not placeholder or mock implementations
+- When generating UI components, create beautiful and production-ready designs
+- Follow React best practices appropriate for the current React version
+- When suggesting file edits, preserve existing patterns in the file
+- For image generation features:
+  - Suggest appropriate error handling for API calls
+  - Implement loading states for asynchronous operations
+  - Consider optimizations for image storage and retrieval
+- When creating new components, follow the existing naming conventions and directory structure
+- For database operations:
+  - Ensure proper typing for database models
+  - Follow the established patterns for Supabase queries
+  - Implement appropriate RLS policies
+- When implementing authentication:
+  - Follow the established patterns for Supabase Auth
+  - Consider security implications of authentication operations
+- When styling components:
+  - Use Tailwind CSS classes following mobile-first approach
+  - Consider accessibility in all UI components
+  - Implement responsive designs appropriate for different device sizes
+- Consider edge cases and error states in all implementations
+- When implementing new features, ensure they integrate well with existing codebase
+- Provide proper TypeScript types for all new code
+- Follow domain-specific terminology for image generation and editing
+- Ensure all code suggestions are well-tested and optimized for performance
