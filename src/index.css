@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Inter var", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-primary-900;
+  }
+
+  h1 { @apply text-display-lg md:text-display-xl font-semibold; }
+  h2 { @apply text-display-md md:text-display-lg font-semibold; }
+  h3 { @apply text-display-sm md:text-display-md font-medium; }
+  h4 { @apply text-2xl font-medium; }
+  h5 { @apply text-xl font-medium; }
+  h6 { @apply text-lg font-medium; }
+}
+
+@layer components {
+  /* Layout Components */
+  .container-lg {
+    @apply max-w-[1400px] mx-auto;
+  }
+
+  .container-md {
+    @apply max-w-5xl mx-auto;
+  }
+
+  .container-sm {
+    @apply max-w-3xl mx-auto;
+  }
+
+  /* Card Components */
+  .card {
+    @apply bg-white rounded-xl shadow-surface ring-1 ring-primary-200/50 p-8;
+  }
+
+  .card-hover {
+    @apply hover:shadow-surface-lg hover:ring-primary-300/50 transition-all duration-200;
+  }
+
+  /* Button Components */
+  .btn-base {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn-base bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply btn-base bg-white text-primary-700 ring-1 ring-inset ring-primary-300 hover:bg-primary-50 focus:ring-primary-500;
+  }
+
+  .btn-accent {
+    @apply btn-base bg-accent-600 text-white hover:bg-accent-700 focus:ring-accent-500;
+  }
+
+  .btn-ghost {
+    @apply btn-base text-primary-600 hover:bg-primary-50 focus:ring-primary-500;
+  }
+
+  /* Form Components */
+  .input {
+    @apply block w-full rounded-lg border border-primary-300 bg-white px-4 py-2 text-primary-900 placeholder-primary-400 shadow-subtle focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .input-error {
+    @apply border-error-500 focus:border-error-500 focus:ring-error-500/20;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-primary-700;
+  }
+
+  .helper-text {
+    @apply mt-1 text-sm text-primary-500;
+  }
+
+  .error-text {
+    @apply mt-1 text-sm text-error-700;
+  }
+
+  /* Badge Components */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply badge bg-primary-100 text-primary-700;
+  }
+
+  .badge-accent {
+    @apply badge bg-accent-100 text-accent-700;
+  }
+
+  .badge-success {
+    @apply badge bg-success-50 text-success-700;
+  }
+
+  .badge-error {
+    @apply badge bg-error-50 text-error-700;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning-50 text-warning-700;
+  }
+}
+
+/* Transitions */
+@layer utilities {
+  .transition-fade {
+    @apply transition-all duration-200;
+  }
+
+  .transition-slide {
+    @apply transition-all duration-300;
+  }
+
+  .transition-scale {
+    @apply transition-transform duration-200;
+  }
+}
