@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -17,11 +20,37 @@ function Login() {
       setLoading(true);
       await login(email, password);
       navigate('/gallery');
-    } catch (err) {
-      setError('Failed to sign in');
-      console.error('Login error:', err);
+    } catch (err: any) {
+      if (err.message?.includes('email_not_confirmed')) {
+        setError('Please check your email to confirm your account before logging in.');
+      } else {
+        setError('Failed to sign in');
+        console.error('Login error:', err);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    try {
+      setResending(true);
+      setError('');
+      setResendSuccess(false);
+
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+      });
+
+      if (error) throw error;
+
+      setResendSuccess(true);
+    } catch (err) {
+      console.error('Error resending confirmation:', err);
+      setError('Failed to resend confirmation email. Please try again.');
+    } finally {
+      setResending(false);
     }
   };
 
@@ -39,8 +68,23 @@ function Login() {
         </div>
 
         {error && (
-          <div className="bg-error-50 text-error-700 p-4 rounded-lg text-sm" role="alert">
-            {error}
+          <div className="bg-error-50 text-error-700 p-4 rounded-lg text-sm space-y-2" role="alert">
+            <p>{error}</p>
+            {error.includes('confirm') && !resendSuccess && (
+              <button
+                onClick={handleResendConfirmation}
+                disabled={resending}
+                className="text-accent-600 hover:text-accent-500 font-medium"
+              >
+                {resending ? 'Sending...' : 'Resend confirmation email'}
+              </button>
+            )}
+          </div>
+        )}
+
+        {resendSuccess && (
+          <div className="bg-success-50 text-success-700 p-4 rounded-lg text-sm" role="alert">
+            Confirmation email sent! Please check your inbox.
           </div>
         )}
 

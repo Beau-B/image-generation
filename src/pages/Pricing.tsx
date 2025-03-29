@@ -2,14 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
-import { createCheckoutSession } from '../services/stripe';
 import { Check } from 'lucide-react';
 
 const PRICING_TIERS = [
   {
     name: 'Free',
     price: 0,
-    priceId: null,
+    paymentLink: null,
     features: [
       '10 image generations per month',
       '5 image edits per month',
@@ -20,7 +19,7 @@ const PRICING_TIERS = [
   {
     name: 'Pro',
     price: 9.99,
-    priceId: 'price_pro',
+    paymentLink: 'https://buy.stripe.com/test_bIY16l2T4eF075e288',
     features: [
       '100 image generations per month',
       '50 image edits per month',
@@ -32,7 +31,7 @@ const PRICING_TIERS = [
   {
     name: 'Enterprise',
     price: 29.99,
-    priceId: 'price_enterprise',
+    paymentLink: 'https://buy.stripe.com/test_28o16l2T4eF075e289',
     features: [
       'Unlimited image generations',
       'Unlimited image edits',
@@ -49,20 +48,19 @@ function Pricing() {
   const { user } = useAuth();
   const { subscription } = useUser();
 
-  const handleSubscribe = async (priceId: string | null) => {
-    if (!user) {
+  const handleSubscribe = async (tier: typeof PRICING_TIERS[0]) => {
+    if (!user && tier.paymentLink) {
       navigate('/signup');
       return;
     }
 
-    if (!priceId) {
-      return; // Free tier doesn't need checkout
+    if (tier.name.toLowerCase() === subscription?.plan?.toLowerCase() && tier.paymentLink) {
+      window.location.href = 'https://billing.stripe.com/p/login/test_28o16l2T4eF075e289';
+      return;
     }
 
-    try {
-      await createCheckoutSession(user.id, priceId);
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
+    if (tier.paymentLink) {
+      window.location.href = tier.paymentLink;
     }
   };
 
@@ -77,7 +75,7 @@ function Pricing() {
 
       <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {PRICING_TIERS.map((tier) => {
-          const isCurrentPlan = subscription?.plan === tier.name.toLowerCase();
+          const isCurrentPlan = subscription?.plan?.toLowerCase() === tier.name.toLowerCase();
 
           return (
             <div
@@ -104,15 +102,24 @@ function Pricing() {
                 </ul>
                 <div className="mt-8">
                   {isCurrentPlan ? (
-                    <button
-                      disabled
-                      className="w-full bg-primary-100 text-primary-700 py-2 px-4 rounded-md text-sm font-medium"
-                    >
-                      Current Plan
-                    </button>
+                    tier.paymentLink ? (
+                      <button
+                        onClick={() => handleSubscribe(tier)}
+                        className="btn-secondary w-full"
+                      >
+                        Manage Plan
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="w-full bg-primary-100 text-primary-700 py-2 px-4 rounded-md text-sm font-medium"
+                      >
+                        Current Plan
+                      </button>
+                    )
                   ) : (
                     <button
-                      onClick={() => handleSubscribe(tier.priceId)}
+                      onClick={() => handleSubscribe(tier)}
                       className="btn-accent w-full"
                     >
                       {tier.price === 0 ? 'Get Started' : 'Subscribe'}
